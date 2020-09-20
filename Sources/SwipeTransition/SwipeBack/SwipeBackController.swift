@@ -13,6 +13,7 @@ public final class SwipeBackController: NSObject {
     public var onStartTransition: ((UIViewControllerContextTransitioning) -> Void)?
     public var onFinishTransition: ((UIViewControllerContextTransitioning) -> Void)?
     private var isFirstPageOfPageViewController: (() -> Bool)?
+    private var direction: OneFingerDirectionalPanGestureRecognizer.PanDirection = .left
 
     public var isEnabled: Bool {
         get { return context.isEnabled }
@@ -33,11 +34,12 @@ public final class SwipeBackController: NSObject {
 
     private lazy var animator = SwipeBackAnimator(parent: self)
     private let context: SwipeBackContext
-    private lazy var panGestureRecognizer = OneFingerDirectionalPanGestureRecognizer(direction: .right, target: self, action: #selector(handlePanGesture(_:)))
+    private lazy var panGestureRecognizer = OneFingerDirectionalPanGestureRecognizer(direction: direction, target: self, action: #selector(handlePanGesture(_:)))
     private weak var navigationController: UINavigationController?
 
-    public required init(navigationController: UINavigationController) {
+    public required init(navigationController: UINavigationController, direction: OneFingerDirectionalPanGestureRecognizer.PanDirection) {
         context = SwipeBackContext(target: navigationController)
+        self.direction = direction
         super.init()
 
         self.navigationController = navigationController

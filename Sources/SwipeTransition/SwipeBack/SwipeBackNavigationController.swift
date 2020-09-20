@@ -11,6 +11,6 @@ import UIKit
 open class SwipeBackNavigationController: UINavigationController {
     open override func viewDidLoad() {
         super.viewDidLoad()
-        swipeBack = SwipeBackController(navigationController: self)
+        swipeBack = SwipeBackController(navigationController: self, direction: .left)
     }
 }

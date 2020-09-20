@@ -25,7 +25,12 @@ final class SwipeBackContext: Context<UINavigationController>, ContextType {
 
     func allowsTransitionFinish(recognizer: UIPanGestureRecognizer) -> Bool {
         guard let view = targetView else { return false }
-        return recognizer.velocity(in: view).x > 0
+        if let panGesture = recognizer as? OneFingerDirectionalPanGestureRecognizer, panGesture.direction == .left {
+           return recognizer.velocity(in: view).x < 0
+        } else {
+            return recognizer.velocity(in: view).x > 0
+        }
+        
     }
 
     func didStartTransition() {
@@ -35,6 +40,10 @@ final class SwipeBackContext: Context<UINavigationController>, ContextType {
     func updateTransition(recognizer: UIPanGestureRecognizer) {
         guard let view = targetView, isEnabled else { return }
         let translation = recognizer.translation(in: view)
-        interactiveTransition?.update(value: translation.x, maxValue: view.bounds.width)
+        if let panGesture = recognizer as? OneFingerDirectionalPanGestureRecognizer, panGesture.direction == .left {
+           interactiveTransition?.update(value: -translation.x, maxValue: view.bounds.width)
+        } else {
+           interactiveTransition?.update(value: translation.x, maxValue: view.bounds.width)
+        }
     }
 }

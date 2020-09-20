@@ -8,8 +8,8 @@
 
 import UIKit
 
-final class OneFingerDirectionalPanGestureRecognizer: UIPanGestureRecognizer {
-    enum PanDirection {
+public class OneFingerDirectionalPanGestureRecognizer: UIPanGestureRecognizer {
+     public enum PanDirection {
         case up //swiftlint:disable:this identifier_name
         case down
         case left
@@ -26,7 +26,7 @@ final class OneFingerDirectionalPanGestureRecognizer: UIPanGestureRecognizer {
         delaysTouchesBegan = true
     }
 
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesMoved(touches, with: event)
 
         if state == .began {
