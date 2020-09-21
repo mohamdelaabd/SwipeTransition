@@ -11,9 +11,11 @@ import UIKit
 final class SwipeBackAnimator: NSObject {
     private weak var parent: SwipeBackController!
     private weak var toView: UIView?
-    required init(parent: SwipeBackController) {
+    private var direction: OneFingerDirectionalPanGestureRecognizer.PanDirection!
+    required init(parent: SwipeBackController, direction: OneFingerDirectionalPanGestureRecognizer.PanDirection) {
         super.init()
         self.parent = parent
+        self.direction = direction
     }
 }
 
@@ -29,7 +31,11 @@ extension SwipeBackAnimator: UIViewControllerAnimatedTransitioning {
         toView = to.view
 
         // parallax effect
-        to.view.transform.tx = -transitionContext.containerView.bounds.width * SwipeBackConfiguration.shared.parallaxFactor
+        if direction == .right {
+            to.view.transform.tx = -transitionContext.containerView.bounds.width * SwipeBackConfiguration.shared.parallaxFactor
+        } else {
+           to.view.transform.tx = transitionContext.containerView.bounds.width * SwipeBackConfiguration.shared.parallaxFactor
+        }
 
         // dim the back view
         let dimmedView = UIView(frame: to.view.bounds)
@@ -42,9 +48,13 @@ extension SwipeBackAnimator: UIViewControllerAnimatedTransitioning {
             withDuration: transitionDuration(using: transitionContext),
             delay: 0,
             options: UIView.AnimationOptions.curveLinear,
-            animations: {
+            animations: { [weak self] in
                 to.view.transform = .identity
-                from.view.transform = CGAffineTransform(translationX: to.view.frame.width, y: 0)
+                if self?.direction == .right {
+                   from.view.transform = CGAffineTransform(translationX: to.view.frame.width, y: 0)
+                } else {
+                  from.view.transform = CGAffineTransform(translationX: -1 * to.view.frame.width, y: 0)
+                }
                 dimmedView.alpha = 0
         }, completion: { [weak self] _ in
             dimmedView.removeFromSuperview()
