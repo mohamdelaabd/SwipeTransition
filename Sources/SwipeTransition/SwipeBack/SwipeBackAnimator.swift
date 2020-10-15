@@ -38,9 +38,9 @@ extension SwipeBackAnimator: UIViewControllerAnimatedTransitioning {
         }
 
         // dim the back view
-        let dimmedView = UIView(frame: to.view.bounds)
-        dimmedView.backgroundColor = UIColor(white: 0, alpha: SwipeBackConfiguration.shared.backViewDimness)
-        to.view.addSubview(dimmedView)
+//        let dimmedView = UIView(frame: to.view.bounds)
+//        dimmedView.backgroundColor = UIColor(white: 0, alpha: SwipeBackConfiguration.shared.backViewDimness)
+//        to.view.addSubview(dimmedView)
 
         parent.onStartTransition?(transitionContext)
 
@@ -55,9 +55,9 @@ extension SwipeBackAnimator: UIViewControllerAnimatedTransitioning {
                 } else {
                   from.view.transform = CGAffineTransform(translationX: -1 * to.view.frame.width, y: 0)
                 }
-                dimmedView.alpha = 0
+//                dimmedView.alpha = 0
         }, completion: { [weak self] _ in
-            dimmedView.removeFromSuperview()
+//            dimmedView.removeFromSuperview()
             from.view.transform = .identity
             self?.parent.onFinishTransition?(transitionContext)
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
